@@ -39,7 +39,7 @@ def insert_data():
         cur = conn.cursor()
 
         # Execute the INSERT statement
-        cur.execute("INSERT INTO products (name, buying_price,selling_price,stock_quantity) VALUES (%s, %s)", ("yoghurt", "20","50","10"))
+        cur.execute("INSERT INTO products (name, buying_price,selling_price,stock_quantity) VALUES (%s, %s, %s, %s)", ("yoghurt", "20","50","10"))
 
         # Commit the transaction
         conn.commit()
