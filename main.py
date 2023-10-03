@@ -1,10 +1,26 @@
-from dbservices import get_data ,insert_data
-from flask import Flask,render_template
+from dbservices import get_data,insert_product
+from flask import Flask,render_template,request,redirect
+
+
+
  
 app=Flask(__name__)
 @app.route("/")
 def sales_system():
      return render_template("index.html")
+
+
+@app.route("/add-product" , methods=["POST"])
+def add_product():
+    pn = request.form['name']
+    bp = request.form['buying_price']
+    sp = request.form['selling_price']
+    sq = request.form['stock_quantity']
+
+    stored_var=(pn,bp,sp,sq)
+    insert_product(stored_var)
+
+    return redirect("/products")
 
 @app.route("/products")
 def product():
@@ -19,5 +35,5 @@ def sales():
 def dashboard():
      return render_template("dashboard.html")
 
-app.run()
+app.run(debug=True)
 
