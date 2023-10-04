@@ -30,6 +30,26 @@
       </nav>
     <div class="container-fluid">
         <h1>my sales</h1>
+
+        
+
+        
+
+        <form action="/add-sale" method="POST">
+          <select name="productid">
+            {% for prd in myprd %}
+            <option value="{{ prd[0] }}">{{ prd[1] }}</option>
+            {% endfor %}
+          </select>
+           
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">quantity</label>
+            <input type="number" class="form-control" name="quantity" id="exampleInputPassword1">
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
         <table class="table">
             <thead>
               <tr>
@@ -41,7 +61,7 @@
               </tr>
             </thead>
             <tbody>
-                {% for sale in mysales %}
+               {%  for sale in mysales %} 
               <tr>
                 <td>{{ sale[0] }}</td>
                 <td>{{ sale[1] }}</td>

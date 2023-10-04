@@ -1,4 +1,4 @@
-from dbservices import get_data,insert_product
+from dbservices import get_data,insert_product,insert_sales
 from flask import Flask,render_template,request,redirect
 
 
@@ -26,10 +26,21 @@ def add_product():
 def product():
     prod = get_data("products")
     return render_template("product.html",myproducts=prod)
+
+@app.route("/add-sale" , methods=["POST"])
+def add_sales():
+     productid=request.form["productid"]
+     quantity = request.form['quantity']  
+     store_sale=(productid,quantity)
+     insert_sales(store_sale)
+
+     return redirect("/sales")
+
 @app.route("/sales")
 def sales():
      sale=get_data("sales")
-     return render_template("sales.html",mysales=sale)
+     prd=get_data("products")
+     return render_template("sales.html",mysales=sale , myprd=prd)
 
 @app.route("/dashboard")
 def dashboard():
