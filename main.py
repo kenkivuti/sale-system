@@ -1,4 +1,4 @@
-from dbservices import get_data,insert_product,insert_sales
+from dbservices import get_data,insert_product,insert_sales,calc_profit
 from flask import Flask,render_template,request,redirect
 
 
@@ -44,7 +44,15 @@ def sales():
 
 @app.route("/dashboard")
 def dashboard():
-     return render_template("dashboard.html")
+     dates = []
+     profits = []
+     for i  in calc_profit():
+        dates.append(str(i[0]))
+        profits.append(float(i[1]))
+
+     return render_template("dashboard.html" ,dates=dates,profits=profits)
+
+
 
 app.run(debug=True)
 

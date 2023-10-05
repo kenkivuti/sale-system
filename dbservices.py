@@ -1,5 +1,5 @@
 import psycopg2
-
+from datetime import date
 conn = psycopg2.connect(database="dukaclass", user='postgres', password='kenkivuti254', host='127.0.0.1', port= '5432')
 
 cur = conn.cursor()
@@ -32,4 +32,17 @@ def insert_sales(values):
       store_sales=f"INSERT INTO sales{column_sales} VALUES(%s,%s,'now()')"
 
       cur.execute(store_sales,values)
+
+
+
+def calc_profit():
+      calc_query="select DATE(created_at) AS Date, sum((selling_price -buying_price)*quantity) as profit from sales join products on products.id=sales.productid group by Date order by date"
+      cur.execute(calc_query)
+      fetch=cur.fetchall()
+      return fetch
+# test = calc_profit()
+# print(test)
+
+
+
 
