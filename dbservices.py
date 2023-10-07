@@ -40,8 +40,27 @@ def calc_profit():
       cur.execute(calc_query)
       fetch=cur.fetchall()
       return fetch
-# test = calc_profit()
-# print(test)
+
+#  create users
+def create_users(values):
+      values_us = "insert into users(full_name,email,password) VALUES (%s,%s,%s)"
+      cur.execute(values_us,values)
+
+
+
+
+# check if email exist
+def  check_email():
+      check_all="select exist(select 1 from users where email = %s )"
+      cur.execute(check_all)
+      email_exist = cur.fetchone()[0]
+      return email_exist
+
+# confirm email and password exist
+def confirm_password():
+      comf_pass = "select count(*) from users where password = %s and email = %s"
+      cur.execute(comf_pass)
+      con_pass = cur.fetchone()[0]
 
 
 
