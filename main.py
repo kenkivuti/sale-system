@@ -1,10 +1,11 @@
-from dbservices import get_data,insert_product,insert_sales,calc_profit,create_users
+from dbservices import get_data,insert_product,insert_sales,calc_profit,create_users,email_pass,email_and_pas
 from flask import Flask,render_template,request,redirect,session,url_for
 
 
 
  
 app=Flask(__name__)
+app.secret_key='kenkivuti'
 
 # def login_check():
 #     if session['email'] != None:
@@ -62,29 +63,37 @@ def dashboard():
 
      return render_template("dashboard.html" ,dates=dates,profits=profits)
 
-@app.route("/add-register",methods=["POST","GET"])
-def add_register():
-    fn=request.form.get('full_name')
-    em=request.form.get('email')
-    ps=request.form.get('password')
-    value_stored=(fn,em,ps)
-    create_users(value_stored)
-    return redirect("/login")
 
-@app.route("/register")
+
+@app.route("/register", methods=['GET','POST'])
 def user_register():
+   if request.method=="POST":
+     fn=request.form['full_name']
+     em=request.form['email']
+     ps=request.form['password']
+     stored_value=(fn,em,ps)
+     create_users(stored_value)
+
+     return redirect(url_for("user_login"))
+
    return render_template("register.html")
 
-@app.route("/direct-login",methods=["post","get"])
-def direct_login():
 
-     return redirect("/dashboard")
 
-@app.route("/login")
+@app.route("/login" , methods=['POST','GET'])
 def user_login():
-  return render_template("login.html")
+   if request.method == 'POST': 
+       m_email=request.form.get('email')
+       m_pass=request.form.get('password')
+       user_access=email_and_pas(m_email,m_pass)
 
-# @app.route
+       if user_access:
+           session['userid'] = user_access
+          #  session['full_name'] = user_access[1]
+           return redirect("/dashbord")
+       else:
+         return redirect(url_for("user_login"))
+
 
 
 app.run(debug=True)

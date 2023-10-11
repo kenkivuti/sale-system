@@ -1,6 +1,6 @@
 import psycopg2
 from datetime import date
-conn = psycopg2.connect(database="dukaclass", user='postgres', password='kenkivuti254', host='127.0.0.1', port= '5432')
+conn = psycopg2.connect(database="dukaclass", user='postgres', password='kenkivuti254', host='localhost', port= '5432')
 
 cur = conn.cursor()
 # select function
@@ -44,23 +44,56 @@ def calc_profit():
 #  create users
 def create_users(values):
       values_us = "insert into users(full_name,email,password) VALUES (%s,%s,%s)"
-      cur.execute(values_us,values)
+      cur.execute(values_us,(values))
+      conn.commit()
 
 
 
 
-# check if email exist
+# query for email
 def  check_email():
       check_all="select exist(select 1 from users where email = %s )"
       cur.execute(check_all)
       email_exist = cur.fetchone()[0]
       return email_exist
 
-# confirm email and password exist
+# query for password
 def confirm_password():
       comf_pass = "select count(*) from users where password = %s and email = %s"
       cur.execute(comf_pass)
       con_pass = cur.fetchone()[0]
+      return con_pass
+
+# check email exists
+def email_pass(email):
+    cursor = conn.cursor()
+    check_all = 'SELECT * FROM users WHERE email=%s'
+
+    cursor.execute(check_all,(email))
+    
+    data=cursor.fetchone()
+
+    if data:
+     return data
+    else:
+         False
+
+
+# check email and pass are the same
+def email_and_pas(email,password):
+     cursor=conn.cursor()
+     e_p="SELECT * FROM users where email =%s"
+     cur.execute(e_p,(email,password))
+     check=cursor.fetchone()
+
+     if check:
+          check[3]==password
+          return check
+
+
+    
+
+
 
 
 
