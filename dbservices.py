@@ -28,8 +28,8 @@ def insert_product(values):
         return True
 
 def insert_sales(values):
-      column_sales="(productid,quantity,created_at)"
-      store_sales=f"INSERT INTO sales{column_sales} VALUES(%s,%s,'now()')"
+      column_sales="(productid,userid,quantity,created_at)"
+      store_sales=f"INSERT INTO sales{column_sales} VALUES(%s,%s,%s,'now()')"
 
       cur.execute(store_sales,values)
 
@@ -81,14 +81,15 @@ def email_pass(email):
 
 # check email and pass are the same
 def email_and_pas(email,password):
-     cursor=conn.cursor()
-     e_p="SELECT * FROM users where email =%s"
+     cur=conn.cursor()
+     e_p="SELECT user_id FROM users where email =%s and password=%s"
      cur.execute(e_p,(email,password))
-     check=cursor.fetchone()
-
-     if check:
-          check[3]==password
-          return check
+     check=cur.fetchone()
+     if check is not None:
+            userid = check[0]
+            return userid
+     else:
+            return None
 
 
     

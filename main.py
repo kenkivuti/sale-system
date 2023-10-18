@@ -85,16 +85,16 @@ def user_login():
    if request.method == 'POST': 
        m_email=request.form.get('email')
        m_pass=request.form.get('password')
-       user_access=email_and_pas(m_email,m_pass)
+       email_and_pas(m_email,m_pass)
+       if email_and_pas:
+          session["userid"]=email_and_pas
+          return redirect("/dashboard")
+     
+   return render_template("login.html")
 
-       if user_access:
-           session['userid'] = user_access
-          #  session['full_name'] = user_access[1]
-           return redirect("/dashbord")
-       else:
-         return redirect(url_for("user_login"))
-
-
+#   if user_access:
+          #  session['user_id'] = user_access
+          # #  session['full_name'] = user_access[1]
 
 app.run(debug=True)
 
