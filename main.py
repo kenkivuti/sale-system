@@ -41,7 +41,7 @@ def product():
 def add_sales():
      productid=request.form["productid"]
      quantity = request.form['quantity']  
-     store_sale=(productid,quantity)
+     store_sale=(productid,quantity,'now()')
      insert_sales(store_sale)
 
      return redirect("/sales")
@@ -80,15 +80,15 @@ def user_register():
 
 
 
-@app.route("/login" , methods=['POST','GET'])
+@app.route("/login" , methods=['GET','POST'])
 def user_login():
    if request.method == 'POST': 
-       m_email=request.form.get('email')
-       m_pass=request.form.get('password')
-       email_and_pas(m_email,m_pass)
-       if email_and_pas:
-          session["userid"]=email_and_pas
-          return redirect("/dashboard")
+      m_email=request.form['email']
+      m_pass=request.form['password']
+      store=email_and_pas(m_email,m_pass)
+      if store:
+       session["userid"]=store[0]
+       return redirect(url_for("dashboard"))
      
    return render_template("login.html")
 
